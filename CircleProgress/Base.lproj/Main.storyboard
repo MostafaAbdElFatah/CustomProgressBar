@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CbE-g3-4S4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="wu6-qq-T5g">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -18,16 +18,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tTd-nh-B5q">
-                                <rect key="frame" x="184" y="433" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <segue destination="BYZ-38-t0r" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="q7X-yp-zS1"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="XRT-Xi-thx">
+                                <rect key="frame" x="50" y="418" width="314" height="60"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tTd-nh-B5q">
+                                        <rect key="frame" x="0.0" y="0.0" width="314" height="30"/>
+                                        <state key="normal" title="ShowProgressBar"/>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="q7X-yp-zS1"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ff-sY-jJS">
+                                        <rect key="frame" x="0.0" y="30" width="314" height="30"/>
+                                        <state key="normal" title="showCircleView"/>
+                                        <connections>
+                                            <segue destination="wu6-qq-T5g" kind="show" id="SZ4-iS-Xa4"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="XRT-Xi-thx" firstAttribute="centerX" secondItem="rCM-5e-LMS" secondAttribute="centerX" id="1Es-Nm-7sa"/>
+                            <constraint firstItem="MG2-wf-GCW" firstAttribute="trailing" secondItem="XRT-Xi-thx" secondAttribute="trailing" constant="50" id="WEn-IP-sMT"/>
+                            <constraint firstItem="XRT-Xi-thx" firstAttribute="centerY" secondItem="rCM-5e-LMS" secondAttribute="centerY" id="YaB-P0-gKH"/>
+                            <constraint firstItem="XRT-Xi-thx" firstAttribute="leading" secondItem="MG2-wf-GCW" secondAttribute="leading" constant="50" id="wRq-Yx-dqE"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="MG2-wf-GCW"/>
                     </view>
                 </viewController>
@@ -36,9 +53,35 @@
             <point key="canvasLocation" x="-730" y="76"/>
         </scene>
         <!--View Controller-->
+        <scene sceneID="uwW-6A-b35">
+            <objects>
+                <viewController id="wu6-qq-T5g" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="M8B-gf-zY2">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EiH-tm-Jve" customClass="CustomView" customModule="CircleProgress" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ruR-fS-DNs" firstAttribute="trailing" secondItem="EiH-tm-Jve" secondAttribute="trailing" id="Q4N-1C-Msd"/>
+                            <constraint firstItem="ruR-fS-DNs" firstAttribute="bottom" secondItem="EiH-tm-Jve" secondAttribute="bottom" id="b7v-Va-go4"/>
+                            <constraint firstItem="EiH-tm-Jve" firstAttribute="top" secondItem="ruR-fS-DNs" secondAttribute="top" id="gzo-3M-7ja"/>
+                            <constraint firstItem="EiH-tm-Jve" firstAttribute="leading" secondItem="ruR-fS-DNs" secondAttribute="leading" id="syP-L6-teP"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ruR-fS-DNs"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ti5-T6-82o" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="86" y="365"/>
+        </scene>
+        <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="CircleProgress" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -76,8 +119,9 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="28" y="76"/>
+            <point key="canvasLocation" x="86" y="-415"/>
         </scene>
     </scenes>
 </document>
