@@ -9,114 +9,325 @@
 import UIKit
 
 class ProgressBar: UIView {
-
-    var value = 0.25
-    var timer:Timer!
-    let shaperLayer = CAShapeLayer()
-    var plusSatingLayer:CAShapeLayer!
-    var label:UILabel = {
+    
+    // MARK: - circle paramters
+    //private var circleRadius:CGFloat = 75
+    private var circleStartAngle:CGFloat = -CGFloat.pi / 2
+    private var circleEndAngle:CGFloat = 2 * CGFloat.pi
+    
+//    @IBInspectable
+//    var radius: CGFloat {
+//        get {
+//            return self.circleRadius
+//        }
+//        set {
+//            self.circleRadius = newValue
+//        }
+//    }
+    
+    @IBInspectable
+    var startAngle: CGFloat {
+        get {
+            return self.circleStartAngle
+        }
+        set {
+            self.circleStartAngle = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var endAngle: CGFloat {
+        get {
+            return self.circleEndAngle
+        }
+        set {
+            self.circleEndAngle = newValue
+            self.redraw()
+        }
+    }
+    
+    // MARK: - plussating circle paramters
+    private var plussatingLayerScale:CGFloat = 1.2
+    private var plussatingLayerColor:UIColor = #colorLiteral(red: 0.5098039216, green: 0, blue: 0.4869058099, alpha: 1)
+    private var plussatingLayerStrokeColor:UIColor = UIColor.clear
+    private let plussatingLayer = CAShapeLayer()
+    
+    @IBInspectable
+       var plussatingScale: CGFloat {
+           get {
+               return self.plussatingLayerScale
+           }
+           set {
+               self.plussatingLayerScale = newValue
+               self.redraw()
+           }
+       }
+    
+    @IBInspectable
+    var plussatingColor: UIColor {
+        get {
+            return self.plussatingLayerColor
+        }
+        set {
+            self.plussatingLayerColor = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var plussatingStrokeColor: UIColor {
+        get {
+            return self.plussatingLayerStrokeColor
+        }
+        set {
+            self.plussatingLayerStrokeColor = newValue
+            self.redraw()
+        }
+    }
+    
+    // MARK: - track circle paramters
+    private var trackLayerStrokeColor:UIColor = UIColor.lightGray
+    private var trackLayerLineWidth:CGFloat = 10
+    private var trackLayerColor:UIColor = UIColor.clear
+    private let trackLayer = CAShapeLayer()
+    
+    @IBInspectable
+    var trackStrokeColor: UIColor {
+        get {
+            return self.trackLayerStrokeColor
+        }
+        set {
+            self.trackLayerStrokeColor = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var trackLineWidth: CGFloat {
+        get {
+            return self.trackLayerLineWidth
+        }
+        set {
+            self.trackLayerLineWidth = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var trackColor: UIColor {
+        get {
+            return self.trackLayerColor
+        }
+        set {
+            self.trackLayerColor = newValue
+            self.redraw()
+        }
+    }
+    
+    // MARK: - shaperLayer
+    private var shaperLayerStrokeColor:UIColor = UIColor.red
+    private var shaperLayerLineCap:CAShapeLayerLineCap = .round
+    private var shaperLayerLineWidth:CGFloat = 10
+    private var shaperLayerColor:UIColor =  UIColor.black
+    private var shaperLayerStrokeStart:CGFloat = 0
+    private var shaperLayerStrokeEnd:CGFloat = 0.005
+    private let shaperLayer = CAShapeLayer()
+    
+    
+    @IBInspectable
+    var shaperStrokeColor: UIColor {
+        get {
+            return self.shaperLayerStrokeColor
+        }
+        set {
+            self.shaperLayerStrokeColor = newValue
+            self.redraw()
+        }
+    }
+    
+    var shaperLineCap: CAShapeLayerLineCap {
+        get {
+            return self.shaperLayerLineCap
+        }
+        set {
+            self.shaperLayerLineCap = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var shaperLineWidth: CGFloat {
+        get {
+            return self.shaperLayerLineWidth
+        }
+        set {
+            self.shaperLayerLineWidth = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var shaperColor: UIColor {
+        get {
+            return self.shaperLayerColor
+        }
+        set {
+            self.shaperLayerColor = newValue
+            self.redraw()
+        }
+    }
+    
+    
+    @IBInspectable
+    var shaperStrokeStart: CGFloat {
+        get {
+            return self.shaperLayerStrokeStart
+        }
+        set {
+            self.shaperLayerStrokeStart = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var shaperStrokeEnd: CGFloat {
+        get {
+            return self.shaperLayerStrokeEnd
+        }
+        set {
+            self.shaperLayerStrokeEnd = newValue
+            self.redraw()
+        }
+    }
+    
+    // MARK: - label
+    private var textLabel = "Loading ..."
+    private var textLabelColor:UIColor = .white
+    private var textLabelFont = UIFont.boldSystemFont(ofSize: 20)
+    
+    @IBInspectable
+    var text: String {
+        get {
+            return self.textLabel
+        }
+        set {
+            self.textLabel = newValue
+            self.redraw()
+        }
+    }
+    
+    @IBInspectable
+    var textColor: UIColor {
+        get {
+            return self.textLabelColor
+        }
+        set {
+            self.textLabelColor = newValue
+            self.redraw()
+        }
+    }
+    
+       var textFont: UIFont {
+           get {
+               return self.textLabelFont
+           }
+           set {
+               self.textLabelFont = newValue
+               self.redraw()
+           }
+       }
+    
+    private lazy var label:UILabel = {
         let label = UILabel()
         label.text = "Loading ..."
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.frame = CGRect(x: 0, y: 0, width: 150, height:100)
+        label.frame = self.frame
         return label
     }()
     
-    override func draw(_ rect: CGRect) {
-        //let center = self.view.center
-        let circulePath = UIBezierPath(arcCenter: .zero, radius: 75, startAngle: -CGFloat.pi / 2 , endAngle: 2 * CGFloat.pi, clockwise: true)
-        
-        
-        
-        
-        self.plusSatingLayer = CAShapeLayer()
-        plusSatingLayer.path = circulePath.cgPath
-        plusSatingLayer.strokeColor = UIColor.clear.cgColor
-        plusSatingLayer.lineCap = .round
-        //plusSatingLayer.lineWidth = 0
-        plusSatingLayer.position = CGPoint(x: self.frame.height / 2 , y: self.frame.width / 2)
-        //75, 18, 53
-        plusSatingLayer.fillColor = #colorLiteral(red: 0.5098039216, green: 0, blue: 0.4869058099, alpha: 1)
-        self.layer.addSublayer(plusSatingLayer)
-        animatePlusSatingLayer()
-        
-        // track
-        let trackLayer = CAShapeLayer()
-        trackLayer.path = circulePath.cgPath
-        trackLayer.strokeColor = UIColor.lightGray.cgColor
-        trackLayer.lineCap = .round
-        trackLayer.lineWidth = 10
-        trackLayer.position = CGPoint(x: self.frame.height / 2 , y: self.frame.width / 2)
-        trackLayer.fillColor = UIColor.clear.cgColor
-        self.layer.addSublayer(trackLayer)
-        
-        
-        shaperLayer.path = circulePath.cgPath
-        // 212, 0, 100
-        shaperLayer.strokeColor = UIColor.init(red: 212, green: 0, blue: 100, alpha: 1).cgColor
-        shaperLayer.lineCap = .round
-        shaperLayer.lineWidth = 10
-        shaperLayer.strokeEnd = 0
-        shaperLayer.position = CGPoint(x: self.frame.height / 2 , y: self.frame.width / 2)
-        shaperLayer.fillColor =  UIColor.black.cgColor
-        self.layer.addSublayer(shaperLayer)
-        
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 4, repeats: true) { (timer) in
-            let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-            basicAnimation.fromValue = 0
-            basicAnimation.toValue = 0.80
-            basicAnimation.duration = 3
-            basicAnimation.fillMode = .forwards
-            basicAnimation.isRemovedOnCompletion = false
-            self.shaperLayer.add(basicAnimation, forKey: "ubasic")
-            
-            let basicAnimation2 = CABasicAnimation(keyPath: "strokeStart")
-            basicAnimation.fromValue = 0
-            basicAnimation2.toValue = 0.80
-            basicAnimation2.duration = 4
-            basicAnimation2.fillMode = .forwards
-            basicAnimation2.isRemovedOnCompletion = false
-            self.shaperLayer.add(basicAnimation2, forKey: "asdsfd")
-            //            self.value += 0.25
-            //            if self.value > 1 {
-            //                self.value = 0.25
-            //                basicAnimation.fromValue = 0
-            //                basicAnimation.isRemovedOnCompletion = true
-            //                //basicAnimation2.fromValue = 0
-            //                //basicAnimation2.isRemovedOnCompletion = true
-            //            }
-        }
-        timer.fire()
-        self.label.center = CGPoint(x: self.frame.height / 2 , y: self.frame.width / 2)
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        self.redraw()
         self.addSubview(label)
-        self.bringSubviewToFront(label)
-        //self.container.backgroundColor = .black
-        //self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
     
-    private func animatePlusSatingLayer(){
+    func redraw()  {
+        var raduis:CGFloat = 75
+        if bounds.height <= bounds.width {
+            raduis = bounds.height / 2 - 30
+        }else{
+           raduis = bounds.width / 2 - 50
+        }
+        
+        let circlePath = UIBezierPath(arcCenter: .zero
+            , radius: raduis
+            , startAngle:circleStartAngle
+            , endAngle: circleEndAngle
+            , clockwise: true)
+        
+        /// plussatingLayer
+        plussatingLayer.path = circlePath.cgPath
+        plussatingLayer.strokeColor = plussatingLayerStrokeColor.cgColor
+        plussatingLayer.lineCap = .round
+        plussatingLayer.fillColor = plussatingColor.cgColor
+        plussatingLayer.removeFromSuperlayer()
+        layer.addSublayer(plussatingLayer)
+        
+        /// trackLayer
+        trackLayer.path = circlePath.cgPath
+        trackLayer.strokeColor = trackLayerStrokeColor.cgColor
+        trackLayer.lineCap = .round
+        trackLayer.lineWidth = trackLayerLineWidth
+        trackLayer.fillColor = trackLayerColor.cgColor
+        trackLayer.removeFromSuperlayer()
+        layer.addSublayer(trackLayer)
+        
+        /// shaperLayer
+        shaperLayer.path = circlePath.cgPath
+        shaperLayer.strokeColor = shaperLayerStrokeColor.cgColor
+        shaperLayer.lineCap = shaperLayerLineCap
+        shaperLayer.lineWidth = shaperLayerLineWidth
+        shaperLayer.fillColor =  shaperLayerColor.cgColor
+        shaperLayer.strokeStart = shaperLayerStrokeStart
+        shaperLayer.strokeEnd = shaperLayerStrokeEnd
+        shaperLayer.removeFromSuperlayer()
+        layer.addSublayer(shaperLayer)
+        
+        /// LoadingLabel
+        label.text = textLabel
+        label.textColor = textLabelColor
+        label.font = textLabelFont
+        bringSubviewToFront(label)
+    }
+    
+    func animate() {
+        /// plussating  animation
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        animation.toValue = 1.2
+        animation.toValue = plussatingScale
         animation.duration = 1
         animation.autoreverses = true
         animation.repeatCount = Float.infinity
-        plusSatingLayer.add(animation, forKey: "plusSatingLayer")
+        plussatingLayer.add(animation, forKey: "plusSatingLayer")
+        
+        /// loading animation
+        let basicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        basicAnimation.fromValue = 0
+        basicAnimation.toValue = CGFloat.pi * 2
+        basicAnimation.repeatCount = .infinity
+        basicAnimation.duration = 5
+        shaperLayer.add(basicAnimation, forKey: "rotate")
     }
     
-    @objc func handleTap()  {
-        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        basicAnimation.fromValue = value - 0.25
-        basicAnimation.toValue = value
-        value += 0.25
-        basicAnimation.duration = 5
-        basicAnimation.fillMode = .forwards
-        basicAnimation.isRemovedOnCompletion = false
-        shaperLayer.add(basicAnimation, forKey: "ubasic")
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        label.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        trackLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+        plussatingLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+        shaperLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
     }
-
-
+    
 }
 
